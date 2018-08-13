@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+
+import { AppState } from '../../store/app.states';
+import { LogOut } from '../../store/actions/auth.actions';
 
 @Component({
   selector: 'app-landing',
@@ -7,9 +11,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LandingComponent implements OnInit {
 
-  constructor() { }
+  constructor(
+    private store: Store<AppState>
+  ) { }
 
   ngOnInit() {
   }
 
+  logOut(): void {
+    this.store.dispatch(new LogOut);
+  }
 }
