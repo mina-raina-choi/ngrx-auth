@@ -1,7 +1,7 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 
-import { RouterModule } from "@angular/router";
+import { RouterModule, CanActivate  } from "@angular/router";
 import { FormsModule } from "@angular/forms";
 import { HttpClientModule } from "@angular/common/http";
 import { EffectsModule } from "@ngrx/effects";
@@ -19,21 +19,23 @@ import {
   TokenInterceptor,
   ErrorInterceptor
 } from "./services/token.interceptor";
-import { StatusComponent } from "./components/status/status.component";
+import { StatusComponent } from './components/status/status.component';
+import { AuthGuardService as AuthGuard  } from "./services/auth-guard.service";
 
 @NgModule({
   declarations: [
     AppComponent,
     LandingComponent,
     SignUpComponent,
-    LogInComponent
+    LogInComponent,
+    StatusComponent
   ],
   imports: [
     BrowserModule,
     RouterModule.forRoot([
       { path: "log-in", component: LogInComponent },
       { path: "sign-up", component: SignUpComponent },
-      { path: 'status', component: StatusComponent },
+      { path: "status", component: StatusComponent, canActivate: [AuthGuard]  },
       { path: "", component: LandingComponent },
       { path: "**", redirectTo: "/" }
     ]),
@@ -44,6 +46,7 @@ import { StatusComponent } from "./components/status/status.component";
   ],
   providers: [
     AuthService,
+    AuthGuard,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
@@ -57,4 +60,4 @@ import { StatusComponent } from "./components/status/status.component";
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }

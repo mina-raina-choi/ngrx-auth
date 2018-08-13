@@ -3,9 +3,9 @@ import {
   HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpErrorResponse
 } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-
 import { AuthService } from './auth.service';
 import { Router } from '../../../node_modules/@angular/router';
+import 'rxjs/add/observable/throw'
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor  {
@@ -36,8 +36,8 @@ export class ErrorInterceptor implements HttpInterceptor {
       .catch((response: any) => {
         if(response instanceof HttpErrorResponse && response.status === 401) {
           console.log(response);
-          // localStorage.removeItem('token');
-          // this.router.navigateByUrl('/log-in');
+          localStorage.removeItem('token');
+          this.router.navigateByUrl('/log-in');
         }
         return Observable.throw(response);
       })
