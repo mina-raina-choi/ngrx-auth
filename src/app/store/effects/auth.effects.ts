@@ -3,8 +3,10 @@ import { Actions, Effect, ofType } from '@ngrx/effects';
 import { AuthService } from "../../services/auth.service";
 import { Router } from "@angular/router";
 import { Observable } from "../../../../node_modules/rxjs/Observable";
-import { AuthActionTypes, LogIn, LogInSuccess, LogInFailure, SignUp, 
-    SignUpSuccess, SignUpFailure, LogOut } from "../actions/auth.actions";
+import {
+    AuthActionTypes, LogIn, LogInSuccess, LogInFailure, SignUp,
+    SignUpSuccess, SignUpFailure, LogOut, GetStatus
+} from "../actions/auth.actions";
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/switchMap';
@@ -18,7 +20,6 @@ export class AuthEffects {
         private authService: AuthService,
         private router: Router
     ) { }
-
 
 
     @Effect()
@@ -92,4 +93,20 @@ export class AuthEffects {
             localStorage.removeItem('token');
         })
     );
+
+    @Effect({ dispatch: false })
+    GetStatus: Observable<any> = this.actions
+        .ofType(AuthActionTypes.GET_STATUS)
+        .map((action: GetStatus) => action)
+        .switchMap(payload => {
+            return this.authService.getStatus();
+        })
+
+    // @Effect({ dispatch: false })
+    // GetStatus: Observable<any> = this.actions
+    //     .ofType(AuthActionTypes.GET_STATUS)
+    //     .switchMap(payload => {
+    //         return this.authService.getStatus();
+    //     });
+
 }
